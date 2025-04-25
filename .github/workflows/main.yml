@@ -1,0 +1,60 @@
+name: "Sofia_wb_bot_CI"
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: sofia_wb
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+    env:
+      POSTGRES_DB: sofia_wb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      DATABASE_URL: "postgres://postgres:postgres@localhost:5432/sofia_wb"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Java
+        uses: actions/setup-java@v4.3.0
+        with:
+          java-version: 21
+          distribution: 'adopt'
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+      - name: Run tests
+        run: ./gradlew test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Java
+        uses: actions/setup-java@v4.3.0
+        with:
+          java-version: 21
+          distribution: 'adopt'
+      - name: Run command on remote server
+        uses: D3rHase/ssh-command-action@latest
+        with:
+          host: ${{secrets.SSH_HOST}}
+          user: ${{secrets.SSH_USER}}
+          private_key: ${{secrets.SSH_PRIVATE_KEY}}
+          command: |
+            cd ${{ secrets.PROJECT_FOLDER }};
+            sh stop.sh;
+            sleep 40;
+            sh start.sh master DB_USERNAME=sofia_wb DB_PASSWORD=postgres DB_NAME=postgres DB_PORT=5555 APP_PORT=8099;
