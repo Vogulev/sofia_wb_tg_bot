@@ -17,6 +17,7 @@ services:
       DB_HOST: bot-db
       DB_PORT: 5432
       APP_PORT: ${APP_PORT:?appPortNotProvided}
+      BOT_TOKEN: ${BOT_TOKEN}
     restart: unless-stopped
   bot-db:
     container_name: wb-bot-db
