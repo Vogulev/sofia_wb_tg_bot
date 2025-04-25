@@ -5,7 +5,7 @@ RUN mvn clean install
 
 FROM bellsoft/liberica-openjdk-debian:21.0.1-12 as prod
 WORKDIR /application
-ARG WAR_FILE=/application/build/libs/sofia_wb_tg_bot-1.0.0.jar
+ARG WAR_FILE=/application/target/sofia_wb_tg_bot-1.0.0.jar
 COPY --from=build ${WAR_FILE} /application/app.jar
 ENV DB_USERNAME=example
 ENV DB_PASSWORD=example
