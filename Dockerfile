@@ -1,7 +1,7 @@
 FROM maven:3.9-amazoncorretto-21 as build
 ADD --chown=maven:maven . /application/
 WORKDIR /application
-RUN mvn clean build
+RUN mvn clean install
 
 FROM bellsoft/liberica-openjdk-debian:21.0.1-12 as prod
 WORKDIR /application
