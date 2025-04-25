@@ -58,4 +58,4 @@ jobs:
             sh stop.sh;
             sleep 40;
             echo $pwd;
-            sh start.sh master DB_USERNAME=sofia_wb DB_PASSWORD=postgres DB_NAME=postgres DB_PORT=5555 APP_PORT=8099;
+            sh start.sh main DB_USERNAME=sofia_wb DB_PASSWORD=postgres DB_NAME=postgres DB_PORT=5555 APP_PORT=8099;
