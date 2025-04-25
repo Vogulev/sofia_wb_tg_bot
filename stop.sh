@@ -4,4 +4,4 @@
 docker-compose --env-file ./.env stop
 
 # Ensure, that the old application won't be deployed again.
-maven clean
+mvn clean

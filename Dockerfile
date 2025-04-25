@@ -1,7 +1,7 @@
 FROM maven:3.9.9-jdk21-alpine as build
 ADD --chown=maven:maven . /application/
 WORKDIR /application
-RUN maven clean build --no-daemon --stacktrace
+RUN mvn clean build --no-daemon --stacktrace
 
 FROM bellsoft/liberica-openjdk-debian:21.0.1-12 as prod
 WORKDIR /application

@@ -52,7 +52,7 @@ jobs:
           user: ${{secrets.SSH_USER}}
           private_key: ${{secrets.SSH_PRIVATE_KEY}}
           command: |
-            export test = ${{secrets.PROJECT_FOLDER}}
+            test = ${{secrets.PROJECT_FOLDER}}
             echo test
             cd ${{secrets.PROJECT_FOLDER}}
             sh stop.sh;
