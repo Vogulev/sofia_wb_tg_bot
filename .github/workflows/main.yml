@@ -52,8 +52,10 @@ jobs:
           user: ${{secrets.SSH_USER}}
           private_key: ${{secrets.SSH_PRIVATE_KEY}}
           command: |
-            echo ${{secrets.PROJECT_FOLDER}}
+            export test = ${{secrets.PROJECT_FOLDER}}
+            echo test
             cd ${{secrets.PROJECT_FOLDER}}
             sh stop.sh;
             sleep 40;
+            echo $pwd
             sh start.sh master DB_USERNAME=sofia_wb DB_PASSWORD=postgres DB_NAME=postgres DB_PORT=5555 APP_PORT=8099;
