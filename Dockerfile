@@ -1,8 +1,3 @@
-FROM maven:3.9.9-jdk21-alpine as build
-ADD --chown=maven:maven . /application/
-WORKDIR /application
-RUN mvn clean build --no-daemon --stacktrace
-
 FROM bellsoft/liberica-openjdk-debian:21.0.1-12 as prod
 WORKDIR /application
 ARG WAR_FILE=/application/build/libs/sofia_wb_tg_bot-1.0.0.jar
