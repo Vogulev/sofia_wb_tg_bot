@@ -52,7 +52,7 @@ jobs:
           user: ${{secrets.SSH_USER}}
           private_key: ${{secrets.SSH_PRIVATE_KEY}}
           command: |
-            git -C ${{secrets.PROJECT_FOLDER}} pull || git clone git@github.com:Vogulev/sofia_wb_tg_bot.git ${{secrets.PROJECT_FOLDER}}
+            cd ${{secrets.PROJECT_FOLDER}}
             sh stop.sh;
             sleep 40;
             sh start.sh master DB_USERNAME=sofia_wb DB_PASSWORD=postgres DB_NAME=postgres DB_PORT=5555 APP_PORT=8099;
