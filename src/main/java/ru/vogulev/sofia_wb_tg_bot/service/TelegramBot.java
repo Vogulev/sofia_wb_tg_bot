@@ -2,6 +2,7 @@ package ru.vogulev.sofia_wb_tg_bot.service;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
@@ -21,11 +22,12 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
     private final TelegramClient telegramClient;
     private final String botToken;
+    private final StateMachine stateMachine;
 
-    public TelegramBot(@Value("${BOT_TOKEN}") String botToken) {
-        log.warn(botToken);
+    public TelegramBot(@Value("${BOT_TOKEN}") String botToken, @Autowired StateMachine stateMachine) {
         this.botToken = botToken;
         telegramClient = new OkHttpTelegramClient(botToken);
+        this.stateMachine = stateMachine;
     }
 
     @Override
@@ -37,10 +39,7 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
     public void consume(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             var chat_id = update.getMessage().getChatId();
-            var message = SendMessage.builder()
-                    .chatId(chat_id)
-                    .text("Привет! Введи свой номер телефона")
-                    .build();
+            var message = stateMachine.eventHandler(chat_id, update.getMessage().getText());
             sendMessage(message);
         }
     }
