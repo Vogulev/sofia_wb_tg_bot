@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.vogulev.sofia_wb_tg_bot.model.UserState;
 
 import java.time.LocalDateTime;
 
@@ -14,16 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "wb_user")
 public class WbUser {
 
-    public WbUser(String name, String phone, String about) {
-        this.name = name;
-        this.phone = phone;
-        this.about = about;
-    }
-
-    public WbUser(String name, String phone, String about, String state, LocalDateTime stateUpdate, Long chatId) {
-        this.name = name;
-        this.phone = phone;
-        this.about = about;
+    public WbUser(UserState state, LocalDateTime stateUpdate, Long chatId) {
         this.state = state;
         this.stateUpdate = stateUpdate;
         this.chatId = chatId;
@@ -39,7 +31,8 @@ public class WbUser {
 
     private String about;
 
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private UserState state;
 
     @Column(name = "state_update")
     private LocalDateTime stateUpdate;

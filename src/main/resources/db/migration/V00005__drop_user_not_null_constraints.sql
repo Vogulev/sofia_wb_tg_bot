@@ -1,0 +1,3 @@
+-- DROP constraints
+ALTER TABLE wb_user ALTER COLUMN phone DROP NOT NULL;
+ALTER TABLE wb_user ALTER COLUMN name DROP NOT NULL;

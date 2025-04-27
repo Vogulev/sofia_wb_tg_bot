@@ -2,7 +2,9 @@ package ru.vogulev.sofia_wb_tg_bot;
 
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.LinkPreviewOptions;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import ru.vogulev.sofia_wb_tg_bot.model.UserState;
@@ -25,6 +27,8 @@ public class MessageUtils {
         SendMessage message = SendMessage.builder()
                 .chatId(chatId)
                 .text(text)
+                .linkPreviewOptions(LinkPreviewOptions.builder().preferLargeMedia(true).build())
+                .parseMode(ParseMode.HTML)
                 .build();
         message.setReplyMarkup(replyKeyboard);
         return message;

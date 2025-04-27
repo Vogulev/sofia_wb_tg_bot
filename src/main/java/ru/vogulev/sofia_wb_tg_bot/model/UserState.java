@@ -109,7 +109,8 @@ public enum UserState {
         @Override
         public String text() {
             return "Вот твоё первое видео!\n" +
-                    "Смотри до конца — и пиши сюда кодовое слово, чтобы получить вторую часть.";
+                    "Смотри до конца — и пиши сюда кодовое слово, чтобы получить вторую часть.\n\n" +
+                    "<a href=\"https://youtu.be/8YQ6XrQauDw?si=4yw8c1AtRFajpEPR&feature=share\">ВИДЕО 1</a>";
         }
     },
     VIDEO_1_NOTIFY {
