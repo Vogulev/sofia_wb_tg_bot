@@ -3,7 +3,6 @@ package ru.vogulev.sofia_wb_tg_bot.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
 import org.telegram.telegrambots.meta.api.methods.send.SendVideoNote;
 import ru.vogulev.sofia_wb_tg_bot.MessageUtils;
 import ru.vogulev.sofia_wb_tg_bot.entity.WbUser;
@@ -25,7 +24,6 @@ public class StateMachine {
         var success = handleUserAnswer(user, userMessage);
         SendMessage message;
         SendVideoNote videoNote = null;
-        SendVideo video = null;
         if (success) {
             message = MessageUtils.getMessage(chatId, user.getState());
             if (user.getState().video() != null) {
@@ -34,7 +32,7 @@ public class StateMachine {
             user.setState(user.getState().nextState());
             wbUserRepository.save(user);
         } else {
-            message = MessageUtils.getMessage(chatId, user.getState().unsuccessfulText());
+            message = MessageUtils.getMessage(chatId, user.getState().unsuccessfulText(), user.getState().prevState().replyKeyboard());
         }
         return new Reply(message, videoNote);
     }
@@ -45,6 +43,9 @@ public class StateMachine {
 
     private boolean handleUserAnswer(WbUser user, String userMessage) {
         switch (user.getState()) {
+            case GO -> {
+                return userMessage.equalsIgnoreCase("Поехали!");
+            }
             case NAME -> user.setName(userMessage);
             case PHONE -> user.setPhone(userMessage);
             case ABOUT -> user.setAbout(userMessage);

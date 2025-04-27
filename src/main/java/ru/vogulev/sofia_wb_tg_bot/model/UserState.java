@@ -19,6 +19,11 @@ public enum UserState {
         }
 
         @Override
+        public UserState prevState() {
+            return START;
+        }
+
+        @Override
         public String text() {
             return "Привет! Если ты здесь, то, скорее всего:\n" +
                     "— Устала работать на дядю, жить от зарплаты до зарплаты, \n\n" +
@@ -53,14 +58,29 @@ public enum UserState {
         }
 
         @Override
+        public UserState prevState() {
+            return START;
+        }
+
+        @Override
         public String text() {
             return "Давай познакомимся с тобой перед началом! Напиши ниже, как тебя зовут? \uD83D\uDC47\uD83C\uDFFB";
+        }
+
+        @Override
+        public String unsuccessfulText() {
+            return "Жми кнопку \"Поехали!\"";
         }
     },
     NAME {
         @Override
         public UserState nextState() {
             return PHONE;
+        }
+
+        @Override
+        public UserState prevState() {
+            return GO;
         }
 
         @Override
@@ -75,6 +95,11 @@ public enum UserState {
         }
 
         @Override
+        public UserState prevState() {
+            return NAME;
+        }
+
+        @Override
         public String text() {
             return "Расскажи чем ты сейчас занимаешься: может быть ты в декрете или работаешь в найме?";
         }
@@ -83,6 +108,11 @@ public enum UserState {
         @Override
         public UserState nextState() {
             return VIDEO_1;
+        }
+
+        @Override
+        public UserState prevState() {
+            return PHONE;
         }
 
         @Override
@@ -107,6 +137,11 @@ public enum UserState {
         }
 
         @Override
+        public UserState prevState() {
+            return ABOUT;
+        }
+
+        @Override
         public String text() {
             return "Вот твоё первое видео!\n" +
                     "Смотри до конца — и пиши сюда кодовое слово, чтобы получить вторую часть.\n\n" +
@@ -118,11 +153,21 @@ public enum UserState {
         public UserState nextState() {
             return PENDING_ANSWER_VIDEO_1;
         }
+
+        @Override
+        public UserState prevState() {
+            return VIDEO_1;
+        }
     },
     PENDING_ANSWER_VIDEO_1 {
         @Override
         public UserState nextState() {
             return VIDEO_2;
+        }
+
+        @Override
+        public UserState prevState() {
+            return VIDEO_1;
         }
 
         @Override
@@ -148,6 +193,11 @@ public enum UserState {
         }
 
         @Override
+        public UserState prevState() {
+            return VIDEO_1;
+        }
+
+        @Override
         public String text() {
             return "Вот твоё второе видео!\n" +
                     "Смотри до конца — и пиши сюда кодовое слово, чтобы получить финальное видео.";
@@ -158,11 +208,21 @@ public enum UserState {
         public UserState nextState() {
             return PENDING_ANSWER_VIDEO_2;
         }
+
+        @Override
+        public UserState prevState() {
+            return VIDEO_2;
+        }
     },
     PENDING_ANSWER_VIDEO_2 {
         @Override
         public UserState nextState() {
             return VIDEO_3;
+        }
+
+        @Override
+        public UserState prevState() {
+            return VIDEO_2;
         }
 
         @Override
@@ -188,6 +248,11 @@ public enum UserState {
         }
 
         @Override
+        public UserState prevState() {
+            return VIDEO_2;
+        }
+
+        @Override
         public String text() {
             return "Вот твоё третье видео!\n" +
                     "Смотри до конца — и пиши сюда кодовое слово.";
@@ -198,11 +263,21 @@ public enum UserState {
         public UserState nextState() {
             return PENDING_ANSWER_VIDEO_3;
         }
+
+        @Override
+        public UserState prevState() {
+            return VIDEO_3;
+        }
     },
     PENDING_ANSWER_VIDEO_3 {
         @Override
         public UserState nextState() {
             return REQUEST;
+        }
+
+        @Override
+        public UserState prevState() {
+            return VIDEO_3;
         }
 
         @Override
@@ -229,6 +304,11 @@ public enum UserState {
         }
 
         @Override
+        public UserState prevState() {
+            return VIDEO_3;
+        }
+
+        @Override
         public String text() {
             return "Спасибо за заявку, мы свяжемся с тобой по указанному телефону";
         }
@@ -238,9 +318,16 @@ public enum UserState {
         public UserState nextState() {
             return END;
         }
+
+        @Override
+        public UserState prevState() {
+            return REQUEST;
+        }
     };
 
     public abstract UserState nextState();
+
+    public abstract UserState prevState();
 
     public String text() {
         return "";
