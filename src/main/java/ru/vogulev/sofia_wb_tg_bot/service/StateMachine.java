@@ -3,9 +3,12 @@ package ru.vogulev.sofia_wb_tg_bot.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendVideoNote;
 import ru.vogulev.sofia_wb_tg_bot.MessageUtils;
 import ru.vogulev.sofia_wb_tg_bot.entity.WbUser;
+import ru.vogulev.sofia_wb_tg_bot.model.Reply;
 import ru.vogulev.sofia_wb_tg_bot.model.User;
+import ru.vogulev.sofia_wb_tg_bot.model.UserState;
 import ru.vogulev.sofia_wb_tg_bot.repository.WbUserRepository;
 
 import java.time.LocalDateTime;
@@ -22,18 +25,27 @@ public class StateMachine {
     private final WbUserRepository wbUserRepository;
     private final Map<Long, User> users = new HashMap<>();
 
-    public SendMessage eventHandler(Long chatId, String userMessage) {
+    public Reply eventHandler(Long chatId, String userMessage) {
         var user = users.get(chatId) == null ? new User(START, chatId) : users.get(chatId);
         var success = handleUserAnswer(user, userMessage);
         SendMessage message;
+        SendVideoNote videoNote = null;
         if (success) {
             message = MessageUtils.getMessage(chatId, user.getState());
+            if (user.getState().video() != null) {
+                videoNote = getVideoNote(chatId, user.getState());
+
+            }
             user.setState(user.getState().nextState());
             users.put(chatId, user);
         } else {
             message = MessageUtils.getMessage(chatId, user.getState().unsuccessfulText());
         }
-        return message;
+        return new Reply(message, videoNote);
+    }
+
+    private SendVideoNote getVideoNote(Long chatId, UserState state) {
+        return new SendVideoNote(String.valueOf(chatId), state.video());
     }
 
     private boolean handleUserAnswer(User user, String userMessage) {

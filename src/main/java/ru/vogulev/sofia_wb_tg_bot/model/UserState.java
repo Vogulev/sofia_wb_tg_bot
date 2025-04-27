@@ -1,11 +1,13 @@
 package ru.vogulev.sofia_wb_tg_bot.model;
 
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
+import java.io.File;
 import java.util.List;
 
 public enum UserState {
@@ -31,6 +33,11 @@ public enum UserState {
                     "— тебе надо будет его написать в бот, чтобы получить следующее видео\n" +
                     "— и ты пройдёшь путь от “смотрю, но боюсь” до “делаю первый шаг”\n\n" +
                     "Поехали?\n";
+        }
+
+        @Override
+        public InputFile video() {
+            return new InputFile().setMedia(new File("src/main/resources/video/greet_Video.mp4"));
         }
 
         @Override
@@ -236,6 +243,10 @@ public enum UserState {
 
     public String text() {
         return "";
+    }
+
+    public InputFile video() {
+        return null;
     }
 
     public String unsuccessfulText() {

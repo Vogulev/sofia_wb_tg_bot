@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.vogulev.sofia_wb_tg_bot.MessageUtils;
 import ru.vogulev.sofia_wb_tg_bot.entity.WbUser;
+import ru.vogulev.sofia_wb_tg_bot.model.Reply;
 import ru.vogulev.sofia_wb_tg_bot.model.UserState;
 import ru.vogulev.sofia_wb_tg_bot.repository.WbUserRepository;
 
@@ -44,7 +45,7 @@ public class NotifyService {
             var stateUpdate = wbUser.getStateUpdate();
             if (stateUpdate.plusMinutes(notifyTime).isBefore(LocalDateTime.now())) {
                 var message = MessageUtils.getMessage(wbUser.getChatId(), wbUser.getName() + notifyText);
-                telegramBot.sendMessage(message);
+                telegramBot.proceed(new Reply(message));
                 wbUser.setState(transitionState.name());
                 wbUserRepository.save(wbUser);
             }

@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
+import ru.vogulev.sofia_wb_tg_bot.model.Reply;
 
 @Slf4j
 @Getter
@@ -39,14 +40,17 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
     public void consume(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             var chat_id = update.getMessage().getChatId();
-            var message = stateMachine.eventHandler(chat_id, update.getMessage().getText());
-            sendMessage(message);
+            var reply = stateMachine.eventHandler(chat_id, update.getMessage().getText());
+            proceed(reply);
         }
     }
 
-    public void sendMessage(SendMessage message) {
+    public void proceed(Reply reply) {
         try {
-            telegramClient.execute(message);
+            telegramClient.execute(reply.getMessage());
+            if (reply.getVideoNote() != null) {
+                telegramClient.execute(reply.getVideoNote());
+            }
         } catch (TelegramApiException e) {
             log.error(e.getMessage());
         }
