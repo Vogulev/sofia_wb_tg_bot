@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Component
 @RequiredArgsConstructor
 public class StateMachine {
+    public static final String START_CMD = "/start";
     private final WbUserRepository wbUserRepository;
 
     public Reply eventHandler(Long chatId, String userMessage) {
@@ -42,12 +43,25 @@ public class StateMachine {
     }
 
     private boolean handleUserAnswer(WbUser user, String userMessage) {
+        if (userMessage.equals(START_CMD)) {
+            user.setState(UserState.START);
+        }
         switch (user.getState()) {
             case GO -> {
                 return userMessage.equalsIgnoreCase("Поехали!");
             }
-            case NAME -> user.setName(userMessage);
-            case PHONE -> user.setPhone(userMessage);
+            case NAME -> {
+                if (!userMessage.matches("^[a-zA-Zа-яА-ЯёЁ\\s-]+$")) {
+                    return false;
+                }
+                user.setName(userMessage);
+            }
+            case PHONE -> {
+                if (!userMessage.matches("^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$")) {
+                    return false;
+                }
+                user.setPhone(userMessage);
+            }
             case ABOUT -> user.setAbout(userMessage);
             case PENDING_ANSWER_VIDEO_1, VIDEO_1_NOTIFY -> {
                 return userMessage.equalsIgnoreCase("победа");

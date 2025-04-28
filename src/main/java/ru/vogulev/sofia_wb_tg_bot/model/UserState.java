@@ -87,6 +87,11 @@ public enum UserState {
         public String text() {
             return "И оставь свой номер телефона \uD83D\uDC47\uD83C\uDFFB";
         }
+
+        @Override
+        public String unsuccessfulText() {
+            return "Введите корректное имя, оно не может содержать цифр и спец. символов";
+        }
     },
     PHONE {
         @Override
@@ -102,6 +107,11 @@ public enum UserState {
         @Override
         public String text() {
             return "Расскажи чем ты сейчас занимаешься: может быть ты в декрете или работаешь в найме?";
+        }
+
+        @Override
+        public String unsuccessfulText() {
+            return "Введите корректный номер телефона, что бы мы могли с вами связаться";
         }
     },
     ABOUT {
