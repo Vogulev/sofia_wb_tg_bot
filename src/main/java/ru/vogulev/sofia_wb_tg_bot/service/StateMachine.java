@@ -1,30 +1,48 @@
 package ru.vogulev.sofia_wb_tg_bot.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendVideoNote;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import ru.vogulev.sofia_wb_tg_bot.MessageUtils;
 import ru.vogulev.sofia_wb_tg_bot.entity.WbUser;
 import ru.vogulev.sofia_wb_tg_bot.model.Reply;
 import ru.vogulev.sofia_wb_tg_bot.model.UserState;
 import ru.vogulev.sofia_wb_tg_bot.repository.WbUserRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+
+import static ru.vogulev.sofia_wb_tg_bot.Constants.SEND_REQUEST_MSG;
 
 
 @Component
 @RequiredArgsConstructor
 public class StateMachine {
     public static final String START_CMD = "/start";
+    public static final String DOWNLOAD_CMD = "/download";
     private final WbUserRepository wbUserRepository;
+    private final ExportService exportService;
+    @Value("${BOT_ADMINS}")
+    private List<String> admins;
 
-    public Reply eventHandler(Long chatId, String userMessage) {
+    public Reply eventHandler(Long chatId, String userName, String userMessage) {
         var user = wbUserRepository.findWbUserByChatId(chatId)
                 .orElse(new WbUser(UserState.START, LocalDateTime.now(), chatId));
         var success = handleUserAnswer(user, userMessage);
         SendMessage message;
         SendVideoNote videoNote = null;
+        if (userMessage.equals(DOWNLOAD_CMD) && admins.contains(userName)) {
+            return new Reply(SendDocument.builder()
+                    .chatId(chatId)
+                    .document(new InputFile(exportService.exportUserData(), STR."WbUsers_\{LocalDate.now()}.xlsx"))
+                    .build());
+        }
         if (success) {
             message = MessageUtils.getMessage(chatId, user.getState());
             if (user.getState().video() != null) {
@@ -43,7 +61,7 @@ public class StateMachine {
     }
 
     private boolean handleUserAnswer(WbUser user, String userMessage) {
-        if (userMessage.equals(START_CMD)) {
+        if (Objects.equals(userMessage, START_CMD)) {
             user.setState(UserState.START);
         }
         switch (user.getState()) {
@@ -62,16 +80,16 @@ public class StateMachine {
                 }
                 user.setPhone(userMessage);
             }
+            case VIDEO_1 -> {
+                return userMessage.equalsIgnoreCase("Смотреть 1 видео");
+            }
+            case VIDEO_2 -> {
+                return userMessage.equalsIgnoreCase("Смотреть 2 видео");
+            }
+            case VIDEO_3 -> {
+                return userMessage.equalsIgnoreCase("Смотреть 3 видео");
+            }
             case ABOUT -> user.setAbout(userMessage);
-            case PENDING_ANSWER_VIDEO_1, VIDEO_1_NOTIFY -> {
-                return userMessage.equalsIgnoreCase("победа");
-            }
-            case PENDING_ANSWER_VIDEO_2, VIDEO_2_NOTIFY -> {
-                return userMessage.equalsIgnoreCase("успех");
-            }
-            case PENDING_ANSWER_VIDEO_3, VIDEO_3_NOTIFY -> {
-                return userMessage.equalsIgnoreCase("деньги");
-            }
         }
         return true;
     }

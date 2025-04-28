@@ -31,13 +31,13 @@ public class NotifyService {
     @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
     public void firstNotifyOnVideo1() {
         var wbUsersOnVideo1 = wbUserRepository.getWbUsersByState(UserState.VIDEO_1);
-        notifyUser(wbUsersOnVideo1, VIDEO_1_FIRST_NOTIFY_TIME_MINUTE, VIDEO_1_FIRST_NOTIFY_TEXT, UserState.VIDEO_1_NOTIFY);
+        notifyUser(wbUsersOnVideo1, VIDEO_1_FIRST_NOTIFY_TIME_MINUTE, VIDEO_1_FIRST_NOTIFY_TEXT, UserState.VIDEO_1_NOTIFY_1);
     }
 
     @Scheduled(fixedRate = 30, timeUnit = TimeUnit.MINUTES)
     public void secondNotifyOnVideo1() {
-        List<WbUser> wbUsersOnVideo1 = wbUserRepository.getWbUsersByState(UserState.VIDEO_1_NOTIFY);
-        notifyUser(wbUsersOnVideo1, VIDEO_1_SECOND_NOTIFY_TIME_MINUTE, VIDEO_1_SECOND_NOTIFY_TEXT, UserState.PENDING_ANSWER_VIDEO_1);
+        List<WbUser> wbUsersOnVideo1 = wbUserRepository.getWbUsersByState(UserState.VIDEO_1_NOTIFY_1);
+        notifyUser(wbUsersOnVideo1, VIDEO_1_SECOND_NOTIFY_TIME_MINUTE, VIDEO_1_SECOND_NOTIFY_TEXT, UserState.VIDEO_1_NOTIFY_2);
     }
 
     private void notifyUser(List<WbUser> wbUsers, int notifyTime, String notifyText, UserState transitionState) {

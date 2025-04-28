@@ -1,14 +1,20 @@
 package ru.vogulev.sofia_wb_tg_bot.model;
 
 import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.io.File;
 import java.util.List;
+
+import static ru.vogulev.sofia_wb_tg_bot.Constants.REQUEST_FORM_URL;
+import static ru.vogulev.sofia_wb_tg_bot.Constants.SEND_REQUEST_MSG;
 
 public enum UserState {
 
@@ -47,8 +53,10 @@ public enum UserState {
 
         @Override
         public ReplyKeyboard replyKeyboard() {
-            var row = new KeyboardRow(new KeyboardButton("Поехали!"));
-            return new ReplyKeyboardMarkup(List.of(row));
+            var button = new InlineKeyboardButton("Поехали!");
+            button.setCallbackData("Поехали!");
+            var row = new InlineKeyboardRow(button);
+            return new InlineKeyboardMarkup(List.of(row));
         }
     },
     GO {
@@ -131,19 +139,21 @@ public enum UserState {
                     "—  почему ты до сих пор не на ВБ\n" +
                     "— какие мифы тормозят 90% новичков\n" +
                     "— что ты теряешь, откладывая ещё на один месяц\n\n" +
-                    "Жми на кнопку, смотри — и обязательно пришли кодовое слово, чтобы получить второе видео.\n";
+                    "Жми на кнопку и смотри.\n";
         }
 
         @Override
         public ReplyKeyboard replyKeyboard() {
-            var row = new KeyboardRow(new KeyboardButton("Смотреть 1 видео"));
-            return new ReplyKeyboardMarkup(List.of(row));
+            var button = new InlineKeyboardButton("Смотреть 1 видео");
+            button.setCallbackData("Смотреть 1 видео");
+            var row = new InlineKeyboardRow(button);
+            return new InlineKeyboardMarkup(List.of(row));
         }
     },
     VIDEO_1 {
         @Override
         public UserState nextState() {
-            return PENDING_ANSWER_VIDEO_1;
+            return VIDEO_2;
         }
 
         @Override
@@ -154,25 +164,59 @@ public enum UserState {
         @Override
         public String text() {
             return "Вот твоё первое видео!\n" +
-                    "Смотри до конца — и пиши сюда кодовое слово, чтобы получить вторую часть.\n\n" +
                     "<a href=\"https://youtu.be/8YQ6XrQauDw?si=4yw8c1AtRFajpEPR&feature=share\">ВИДЕО 1</a>";
         }
+
+        @Override
+        public ReplyKeyboard replyKeyboard() {
+            var button = new InlineKeyboardButton("Смотреть 2 видео");
+            button.setCallbackData("Смотреть 2 видео");
+            var row = new InlineKeyboardRow(button);
+            return new InlineKeyboardMarkup(List.of(row));
+        }
     },
-    VIDEO_1_NOTIFY {
+    VIDEO_1_NOTIFY_1 {
         @Override
         public UserState nextState() {
-            return PENDING_ANSWER_VIDEO_1;
+            return VIDEO_2;
         }
 
         @Override
         public UserState prevState() {
             return VIDEO_1;
         }
+
+        @Override
+        public ReplyKeyboard replyKeyboard() {
+            var button = new InlineKeyboardButton("Смотреть 2 видео");
+            button.setCallbackData("Смотреть 2 видео");
+            var row = new InlineKeyboardRow(button);
+            return new InlineKeyboardMarkup(List.of(row));
+        }
     },
-    PENDING_ANSWER_VIDEO_1 {
+    VIDEO_1_NOTIFY_2 {
         @Override
         public UserState nextState() {
             return VIDEO_2;
+        }
+
+        @Override
+        public UserState prevState() {
+            return VIDEO_1;
+        }
+
+        @Override
+        public ReplyKeyboard replyKeyboard() {
+            var button = new InlineKeyboardButton("Смотреть 2 видео");
+            button.setCallbackData("Смотреть 2 видео");
+            var row = new InlineKeyboardRow(button);
+            return new InlineKeyboardMarkup(List.of(row));
+        }
+    },
+    VIDEO_2 {
+        @Override
+        public UserState nextState() {
+            return VIDEO_3;
         }
 
         @Override
@@ -187,44 +231,18 @@ public enum UserState {
                     "— ты узнаешь, как можно зарабатывать без ИП и вложений от 50 тыс в месяц \n" +
                     "— поймёшь, что подходит именно тебе\n" +
                     "— и увидишь реальные истории людей, которые сделали это\n" +
-                    "Жми на кнопку — и не забудь кодовое слово после просмотра, чтобы пришло финальное видео с самым жиром.";
+                    "<a href=\"https://youtu.be/nw_7oIoCM50?si=tBFiC5vShO1xhFWU&feature=share\">ВИДЕО 2</a>";
         }
 
         @Override
         public ReplyKeyboard replyKeyboard() {
-            var row = new KeyboardRow(new KeyboardButton("Смотреть 2 видео"));
-            return new ReplyKeyboardMarkup(List.of(row));
+            var button = new InlineKeyboardButton("Смотреть 3 видео");
+            button.setCallbackData("Смотреть 3 видео");
+            var row = new InlineKeyboardRow(button);
+            return new InlineKeyboardMarkup(List.of(row));
         }
     },
-    VIDEO_2 {
-        @Override
-        public UserState nextState() {
-            return PENDING_ANSWER_VIDEO_2;
-        }
-
-        @Override
-        public UserState prevState() {
-            return VIDEO_1;
-        }
-
-        @Override
-        public String text() {
-            return "Вот твоё второе видео!\n" +
-                    "Смотри до конца — и пиши сюда кодовое слово, чтобы получить финальное видео.";
-        }
-    },
-    VIDEO_2_NOTIFY {
-        @Override
-        public UserState nextState() {
-            return PENDING_ANSWER_VIDEO_2;
-        }
-
-        @Override
-        public UserState prevState() {
-            return VIDEO_2;
-        }
-    },
-    PENDING_ANSWER_VIDEO_2 {
+    VIDEO_2_NOTIFY_1 {
         @Override
         public UserState nextState() {
             return VIDEO_3;
@@ -236,78 +254,33 @@ public enum UserState {
         }
 
         @Override
-        public String text() {
-            return "Сектор «Приз» на барабане!\n" +
-                    "Шучу, конечно, но в третьем видео реально БОМБА:\n" +
-                    "— 7 смертных ошибок новичков на ВБ\n" +
-                    "— мой личный факап \n" +
-                    "— и самое главное — чек-лист, как запустить продажи без “слива”\n\n" +
-                    "Жми на кнопку, смотри и пиши код — он откроет тебе следующий шаг.\n";
+        public ReplyKeyboard replyKeyboard() {
+            var requestButton = new InlineKeyboardButton(SEND_REQUEST_MSG);
+            requestButton.setUrl(REQUEST_FORM_URL);
+            var row = new InlineKeyboardRow(requestButton);
+            return new InlineKeyboardMarkup(List.of(row));
+        }
+    },
+    VIDEO_2_NOTIFY_2 {
+        @Override
+        public UserState nextState() {
+            return VIDEO_3;
+        }
+
+        @Override
+        public UserState prevState() {
+            return VIDEO_2;
         }
 
         @Override
         public ReplyKeyboard replyKeyboard() {
-            var row = new KeyboardRow(new KeyboardButton("Смотреть 3 видео"));
-            return new ReplyKeyboardMarkup(List.of(row));
+            var requestButton = new InlineKeyboardButton(SEND_REQUEST_MSG);
+            requestButton.setUrl(REQUEST_FORM_URL);
+            var row = new InlineKeyboardRow(requestButton);
+            return new InlineKeyboardMarkup(List.of(row));
         }
     },
     VIDEO_3 {
-        @Override
-        public UserState nextState() {
-            return PENDING_ANSWER_VIDEO_3;
-        }
-
-        @Override
-        public UserState prevState() {
-            return VIDEO_2;
-        }
-
-        @Override
-        public String text() {
-            return "Вот твоё третье видео!\n" +
-                    "Смотри до конца — и пиши сюда кодовое слово.";
-        }
-    },
-    VIDEO_3_NOTIFY {
-        @Override
-        public UserState nextState() {
-            return PENDING_ANSWER_VIDEO_3;
-        }
-
-        @Override
-        public UserState prevState() {
-            return VIDEO_3;
-        }
-    },
-    PENDING_ANSWER_VIDEO_3 {
-        @Override
-        public UserState nextState() {
-            return REQUEST;
-        }
-
-        @Override
-        public UserState prevState() {
-            return VIDEO_3;
-        }
-
-        @Override
-        public String text() {
-            return "Имя, ты прошёл все три видео — это уже победа!\n" +
-                    "Теперь пора сделать шаг к своему запуску.\n\n" +
-                    "Жми на кнопку — оставь заявку на обучение.\n" +
-                    "Ты получишь: — поддержку куратора\n" +
-                    "— шаблоны\n" +
-                    "— план запуска без ошибок\n" +
-                    "— и главное — уверенность в себе и доход\n\n";
-        }
-
-        @Override
-        public ReplyKeyboard replyKeyboard() {
-            var row = new KeyboardRow(new KeyboardButton("Оставить заявку"));
-            return new ReplyKeyboardMarkup(List.of(row));
-        }
-    },
-    REQUEST {
         @Override
         public UserState nextState() {
             return END;
@@ -315,12 +288,24 @@ public enum UserState {
 
         @Override
         public UserState prevState() {
-            return VIDEO_3;
+            return VIDEO_2;
         }
 
         @Override
         public String text() {
-            return "Спасибо за заявку, мы свяжемся с тобой по указанному телефону";
+            return "В третьем видео реально БОМБА:\n" +
+                    "— 7 смертных ошибок новичков на ВБ\n" +
+                    "— мой личный факап \n" +
+                    "— и самое главное — чек-лист, как запустить продажи без “слива”\n" +
+                    "<a href=\"https://youtu.be/kAf6SsfzRDY?si=rRIV0O_UZCS7xpuX&feature=share\">ВИДЕО 3</a>";
+        }
+
+        @Override
+        public ReplyKeyboard replyKeyboard() {
+            var requestButton = new InlineKeyboardButton(SEND_REQUEST_MSG);
+            requestButton.setUrl(REQUEST_FORM_URL);
+            var row = new InlineKeyboardRow(requestButton);
+            return new InlineKeyboardMarkup(List.of(row));
         }
     },
     END {
@@ -331,7 +316,7 @@ public enum UserState {
 
         @Override
         public UserState prevState() {
-            return REQUEST;
+            return VIDEO_3;
         }
     };
 
@@ -348,7 +333,7 @@ public enum UserState {
     }
 
     public String unsuccessfulText() {
-        return "Введено не верное кодовое слово";
+        return "Для получения видео нажми кнопку";
     }
 
     public ReplyKeyboard replyKeyboard() {

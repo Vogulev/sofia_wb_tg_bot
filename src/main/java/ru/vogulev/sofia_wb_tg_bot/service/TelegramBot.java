@@ -11,7 +11,6 @@ import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsume
 import org.telegram.telegrambots.longpolling.starter.AfterBotRegistration;
 import org.telegram.telegrambots.longpolling.starter.SpringLongPollingBot;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -38,18 +37,31 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
 
     @Override
     public void consume(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            var chat_id = update.getMessage().getChatId();
-            var reply = stateMachine.eventHandler(chat_id, update.getMessage().getText());
-            proceed(reply);
+        var reply = new Reply();
+        Long chatId;
+        String userName;
+        if (update.hasCallbackQuery()) {
+            chatId = update.getCallbackQuery().getMessage().getChatId();
+            userName = update.getCallbackQuery().getFrom().getUserName();
+            reply = stateMachine.eventHandler(chatId, userName, update.getCallbackQuery().getData());
+        } else if (update.hasMessage() && update.getMessage().hasText()) {
+            chatId = update.getMessage().getChatId();
+            userName = update.getMessage().getFrom().getUserName();
+            reply = stateMachine.eventHandler(chatId, userName, update.getMessage().getText());
         }
+        proceed(reply);
     }
 
     public void proceed(Reply reply) {
         try {
-            telegramClient.execute(reply.getMessage());
             if (reply.getVideoNote() != null) {
                 telegramClient.execute(reply.getVideoNote());
+            }
+            if (reply.getMessage() != null) {
+                telegramClient.execute(reply.getMessage());
+            }
+            if (reply.getDocument() != null) {
+                telegramClient.execute(reply.getDocument());
             }
         } catch (TelegramApiException e) {
             log.error(e.getMessage());
