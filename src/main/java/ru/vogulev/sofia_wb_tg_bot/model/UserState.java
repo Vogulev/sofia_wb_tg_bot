@@ -50,9 +50,7 @@ public enum UserState {
 
         @Override
         public InputFile video() {
-            var filePath = getClass().getClassLoader().getResource("video/greet_video.mp4").getFile();
-            log.info(filePath);
-            return new InputFile().setMedia(new File(filePath));
+            return new InputFile().setMedia(new File("~/sofia_wb_repo/src/main/resources/video/greet_video.mp4"));
         }
 
         @Override
