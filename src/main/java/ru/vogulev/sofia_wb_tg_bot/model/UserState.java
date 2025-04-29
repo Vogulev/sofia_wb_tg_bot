@@ -53,9 +53,7 @@ public enum UserState {
         @SneakyThrows
         @Override
         public InputFile video() {
-            log.info(Paths.get("").toAbsolutePath().toString());
-            log.info(FileSystems.getDefault().getPath("").toAbsolutePath().toString());
-            log.info(System.getProperty("user.dir"));
+            log.info(Paths.get("video/greet_video.mp4").toAbsolutePath().toString());
             return new InputFile().setMedia(new File("/video/greet_video.mp4"));
         }
 
