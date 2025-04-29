@@ -28,7 +28,7 @@ public class StateMachine {
     public static final String DOWNLOAD_CMD = "/download";
     private final WbUserRepository wbUserRepository;
     private final ExportService exportService;
-    @Value("${BOT_ADMINS}")
+    @Value("${bot.admins}")
     private List<String> admins;
 
     public Reply eventHandler(Long chatId, String userName, String userMessage) {

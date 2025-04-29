@@ -17,3 +17,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/sofia_wb
     username: postgres
     password: postgres
+
+bot:
+  admins: Gammix,sofa_volevaya
