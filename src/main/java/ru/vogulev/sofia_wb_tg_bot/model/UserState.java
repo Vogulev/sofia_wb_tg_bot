@@ -10,6 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRem
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 import static ru.vogulev.sofia_wb_tg_bot.Constants.REQUEST_FORM_URL;
@@ -49,7 +51,7 @@ public enum UserState {
         @SneakyThrows
         @Override
         public InputFile video() {
-            return new InputFile().setMedia(new ClassPathResource("video/greet_video.mp4").getFile());
+            return new InputFile().setMedia(new File("video/greet_video.mp4"));
         }
 
         @Override
