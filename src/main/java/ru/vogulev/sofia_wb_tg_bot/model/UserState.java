@@ -1,6 +1,8 @@
 package ru.vogulev.sofia_wb_tg_bot.model;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -8,10 +10,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRem
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import static ru.vogulev.sofia_wb_tg_bot.Constants.REQUEST_FORM_URL;
@@ -48,9 +46,10 @@ public enum UserState {
                     "Поехали?\n";
         }
 
+        @SneakyThrows
         @Override
         public InputFile video() {
-            return new InputFile().setMedia(new File("~/sofia_wb_repo/src/main/resources/video/greet_video.mp4"));
+            return new InputFile().setMedia(new ClassPathResource("video/greet_video.mp4").getFile());
         }
 
         @Override
