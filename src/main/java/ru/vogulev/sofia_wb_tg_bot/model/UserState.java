@@ -12,6 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.io.File;
 import java.io.InputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static ru.vogulev.sofia_wb_tg_bot.Constants.REQUEST_FORM_URL;
@@ -51,7 +53,10 @@ public enum UserState {
         @SneakyThrows
         @Override
         public InputFile video() {
-            return new InputFile().setMedia(new File("video/greet_video.mp4"));
+            log.info(Paths.get("").toAbsolutePath().toString());
+            log.info(FileSystems.getDefault().getPath("").toAbsolutePath().toString());
+            log.info(System.getProperty("user.dir"));
+            return new InputFile().setMedia(new File("/video/greet_video.mp4"));
         }
 
         @Override
