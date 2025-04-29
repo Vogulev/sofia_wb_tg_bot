@@ -18,6 +18,8 @@ echo "$6" >> ./.env
 echo "$7" >> ./.env
 echo "$8" >> ./.env
 
+echo "$8"
+
 # Ensure, that docker compose stopped
 docker compose --env-file ./.env stop
 
