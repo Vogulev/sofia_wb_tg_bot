@@ -28,7 +28,7 @@ public class StateMachine {
     public static final String DOWNLOAD_CMD = "/download";
     private final WbUserRepository wbUserRepository;
     private final ExportService exportService;
-    @Value("${bot.admins}")
+    @Value("${BOT_ADMINS}")
     private List<String> admins;
 
     public Reply eventHandler(Long chatId, String userName, String userMessage) {
@@ -40,7 +40,7 @@ public class StateMachine {
         if (userMessage.equals(DOWNLOAD_CMD) && admins.contains(userName)) {
             return new Reply(SendDocument.builder()
                     .chatId(chatId)
-                    .document(new InputFile(exportService.exportUserData(), STR."WbUsers_\{LocalDate.now()}.xlsx"))
+                    .document(new InputFile(exportService.exportUserData(), "WbUsers_%s.xlsx".formatted(LocalDate.now())))
                     .build());
         }
         if (success) {
