@@ -55,4 +55,4 @@ jobs:
             cd ${{secrets.PROJECT_FOLDER}};
             sh stop.sh;
             sleep 40;
-            sh start.sh main DB_USERNAME=sofia_wb DB_PASSWORD=postgres DB_NAME=postgres DB_PORT=5555 APP_PORT=8099 BOT_TOKEN=${{secrets.BOT_TOKEN}};
+            sh start.sh main DB_USERNAME=sofia_wb DB_PASSWORD=postgres DB_NAME=postgres DB_PORT=5555 APP_PORT=8099 BOT_TOKEN=${{secrets.BOT_TOKEN}} BOT_ADMINS=${{secrets.BOT_ADMINS}};

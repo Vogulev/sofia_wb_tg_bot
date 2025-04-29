@@ -48,7 +48,7 @@ public enum UserState {
 
         @Override
         public InputFile video() {
-            return new InputFile().setMedia(new File("src/main/resources/video/greet_Video.mp4"));
+            return new InputFile().setMedia(new File("src/main/resources/video/greet_video.mp4"));
         }
 
         @Override
@@ -164,7 +164,7 @@ public enum UserState {
         @Override
         public String text() {
             return "Вот твоё первое видео!\n" +
-                    "<a href=\"https://youtu.be/8YQ6XrQauDw?si=4yw8c1AtRFajpEPR&feature=share\">ВИДЕО 1</a>";
+                    "<a href=\"https://youtu.be/8EJpBQ5ICic?si=RbP0rFMdKL5UaSF0&feature=share\">ВИДЕО 1</a>";
         }
 
         @Override
@@ -231,7 +231,7 @@ public enum UserState {
                     "— ты узнаешь, как можно зарабатывать без ИП и вложений от 50 тыс в месяц \n" +
                     "— поймёшь, что подходит именно тебе\n" +
                     "— и увидишь реальные истории людей, которые сделали это\n" +
-                    "<a href=\"https://youtu.be/nw_7oIoCM50?si=tBFiC5vShO1xhFWU&feature=share\">ВИДЕО 2</a>";
+                    "<a href=\"https://youtu.be/Ht3BkHxtzFk?si=ygOYSzz07ojeGCB9&feature=share\">ВИДЕО 2</a>";
         }
 
         @Override
