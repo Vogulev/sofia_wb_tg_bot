@@ -8,7 +8,7 @@ WORKDIR /application
 ARG WAR_FILE=/application/target/sofia_wb_tg_bot-1.0.0.jar
 ARG VIDEO_FILE=/application/target/classes/video/greet_video.mp4
 COPY --from=build ${WAR_FILE} /application/app.jar
-COPY --from=build ${VIDEO_FILE} /video/greet_video.mp4
+COPY --from=build ${VIDEO_FILE} /application/video/greet_video.mp4
 ENV DB_USERNAME=example
 ENV DB_PASSWORD=example
 ENV DB_NAME=example
