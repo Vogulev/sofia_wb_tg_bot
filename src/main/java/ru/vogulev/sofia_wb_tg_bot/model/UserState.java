@@ -1,8 +1,6 @@
 package ru.vogulev.sofia_wb_tg_bot.model;
 
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ClassPathResource;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -11,15 +9,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 import java.io.File;
-import java.io.InputStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static ru.vogulev.sofia_wb_tg_bot.Constants.REQUEST_FORM_URL;
 import static ru.vogulev.sofia_wb_tg_bot.Constants.SEND_REQUEST_MSG;
 
-@Slf4j
 public enum UserState {
 
     START {
