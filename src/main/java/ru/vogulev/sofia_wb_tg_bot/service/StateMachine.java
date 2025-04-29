@@ -18,8 +18,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import static ru.vogulev.sofia_wb_tg_bot.Constants.SEND_REQUEST_MSG;
-
 
 @Component
 @RequiredArgsConstructor
@@ -45,9 +43,7 @@ public class StateMachine {
         }
         if (success) {
             message = MessageUtils.getMessage(chatId, user.getState());
-            if (user.getState().video() != null) {
-                videoNote = getVideoNote(chatId, user.getState());
-            }
+            videoNote = getVideoNote(chatId, user.getState().video());
             user.setState(user.getState().nextState());
             wbUserRepository.save(user);
         } else {
@@ -56,8 +52,8 @@ public class StateMachine {
         return new Reply(message, videoNote);
     }
 
-    private SendVideoNote getVideoNote(Long chatId, UserState state) {
-        return new SendVideoNote(String.valueOf(chatId), state.video());
+    private SendVideoNote getVideoNote(Long chatId, InputFile video) {
+        return video == null ? null : new SendVideoNote(String.valueOf(chatId), video);
     }
 
     private boolean handleUserAnswer(WbUser user, String userMessage) {
