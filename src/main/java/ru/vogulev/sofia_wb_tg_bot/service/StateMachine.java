@@ -31,7 +31,7 @@ public class StateMachine {
 
     public Reply eventHandler(Long chatId, String userName, String userMessage) {
         var user = wbUserRepository.findWbUserByChatId(chatId)
-                .orElse(new WbUser(UserState.START, LocalDateTime.now(), chatId));
+                .orElse(new WbUser(UserState.START, LocalDateTime.now(), chatId, userName));
         var success = handleUserAnswer(user, userMessage);
         SendMessage message;
         SendVideoNote videoNote = null;

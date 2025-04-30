@@ -182,7 +182,13 @@ public enum UserState {
 
         @Override
         public UserState prevState() {
-            return VIDEO_1;
+            return ABOUT;
+        }
+
+        @Override
+        public String text() {
+            return "Вот твоё первое видео!\n" +
+                    "<a href=\"https://youtu.be/8EJpBQ5ICic?si=RbP0rFMdKL5UaSF0&feature=share\">ВИДЕО 1</a>";
         }
 
         @Override
@@ -201,7 +207,13 @@ public enum UserState {
 
         @Override
         public UserState prevState() {
-            return VIDEO_1;
+            return ABOUT;
+        }
+
+        @Override
+        public String text() {
+            return "Вот твоё первое видео!\n" +
+                    "<a href=\"https://youtu.be/8EJpBQ5ICic?si=RbP0rFMdKL5UaSF0&feature=share\">ВИДЕО 1</a>";
         }
 
         @Override
@@ -249,14 +261,24 @@ public enum UserState {
 
         @Override
         public UserState prevState() {
-            return VIDEO_2;
+            return VIDEO_1;
+        }
+
+        @Override
+        public String text() {
+            return "Класс!\n" +
+                    "Во втором видео:\n" +
+                    "— ты узнаешь, как можно зарабатывать без ИП и вложений от 50 тыс в месяц \n" +
+                    "— поймёшь, что подходит именно тебе\n" +
+                    "— и увидишь реальные истории людей, которые сделали это\n" +
+                    "<a href=\"https://youtu.be/Ht3BkHxtzFk?si=ygOYSzz07ojeGCB9&feature=share\">ВИДЕО 2</a>";
         }
 
         @Override
         public ReplyKeyboard replyKeyboard() {
-            var requestButton = new InlineKeyboardButton(SEND_REQUEST_MSG);
-            requestButton.setUrl(REQUEST_FORM_URL);
-            var row = new InlineKeyboardRow(requestButton);
+            var button = new InlineKeyboardButton("Смотреть 3 видео");
+            button.setCallbackData("Смотреть 3 видео");
+            var row = new InlineKeyboardRow(button);
             return new InlineKeyboardMarkup(List.of(row));
         }
     },
@@ -268,7 +290,45 @@ public enum UserState {
 
         @Override
         public UserState prevState() {
+            return VIDEO_1;
+        }
+
+        @Override
+        public String text() {
+            return "Класс!\n" +
+                    "Во втором видео:\n" +
+                    "— ты узнаешь, как можно зарабатывать без ИП и вложений от 50 тыс в месяц \n" +
+                    "— поймёшь, что подходит именно тебе\n" +
+                    "— и увидишь реальные истории людей, которые сделали это\n" +
+                    "<a href=\"https://youtu.be/Ht3BkHxtzFk?si=ygOYSzz07ojeGCB9&feature=share\">ВИДЕО 2</a>";
+        }
+
+        @Override
+        public ReplyKeyboard replyKeyboard() {
+            var button = new InlineKeyboardButton("Смотреть 3 видео");
+            button.setCallbackData("Смотреть 3 видео");
+            var row = new InlineKeyboardRow(button);
+            return new InlineKeyboardMarkup(List.of(row));
+        }
+    },
+    VIDEO_3 {
+        @Override
+        public UserState nextState() {
+            return END;
+        }
+
+        @Override
+        public UserState prevState() {
             return VIDEO_2;
+        }
+
+        @Override
+        public String text() {
+            return "В третьем видео реально БОМБА:\n" +
+                    "— 7 смертных ошибок новичков на ВБ\n" +
+                    "— мой личный факап \n" +
+                    "— и самое главное — чек-лист, как запустить продажи без “слива”\n" +
+                    "<a href=\"https://youtu.be/kAf6SsfzRDY?si=rRIV0O_UZCS7xpuX&feature=share\">ВИДЕО 3</a>";
         }
 
         @Override
@@ -279,7 +339,35 @@ public enum UserState {
             return new InlineKeyboardMarkup(List.of(row));
         }
     },
-    VIDEO_3 {
+    VIDEO_3_NOTIFY_1 {
+        @Override
+        public UserState nextState() {
+            return END;
+        }
+
+        @Override
+        public UserState prevState() {
+            return VIDEO_2;
+        }
+
+        @Override
+        public String text() {
+            return "В третьем видео реально БОМБА:\n" +
+                    "— 7 смертных ошибок новичков на ВБ\n" +
+                    "— мой личный факап \n" +
+                    "— и самое главное — чек-лист, как запустить продажи без “слива”\n" +
+                    "<a href=\"https://youtu.be/kAf6SsfzRDY?si=rRIV0O_UZCS7xpuX&feature=share\">ВИДЕО 3</a>";
+        }
+
+        @Override
+        public ReplyKeyboard replyKeyboard() {
+            var requestButton = new InlineKeyboardButton(SEND_REQUEST_MSG);
+            requestButton.setUrl(REQUEST_FORM_URL);
+            var row = new InlineKeyboardRow(requestButton);
+            return new InlineKeyboardMarkup(List.of(row));
+        }
+    },
+    VIDEO_3_NOTIFY_2 {
         @Override
         public UserState nextState() {
             return END;

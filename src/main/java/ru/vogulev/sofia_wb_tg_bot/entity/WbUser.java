@@ -15,15 +15,19 @@ import java.time.LocalDateTime;
 @Table(name = "wb_user")
 public class WbUser {
 
-    public WbUser(UserState state, LocalDateTime stateUpdate, Long chatId) {
+    public WbUser(UserState state, LocalDateTime stateUpdate, Long chatId, String tgUserName) {
         this.state = state;
         this.stateUpdate = stateUpdate;
         this.chatId = chatId;
+        this.tgUserName = tgUserName;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "tg_user_name")
+    private String tgUserName;
 
     private String name;
 
