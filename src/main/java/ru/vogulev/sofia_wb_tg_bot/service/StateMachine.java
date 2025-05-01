@@ -30,8 +30,9 @@ public class StateMachine {
     private List<String> admins;
 
     public Reply eventHandler(Long chatId, String userName, String userMessage) {
+        var currentDateTime = LocalDateTime.now();
         var user = wbUserRepository.findWbUserByChatId(chatId)
-                .orElse(new WbUser(UserState.START, LocalDateTime.now(), chatId, userName));
+                .orElse(new WbUser(UserState.START, currentDateTime, chatId, userName));
         var success = handleUserAnswer(user, userMessage);
         SendMessage message;
         SendVideoNote videoNote = null;
@@ -45,6 +46,7 @@ public class StateMachine {
             message = MessageUtils.getMessage(chatId, user.getState());
             videoNote = getVideoNote(chatId, user.getState().video());
             user.setState(user.getState().nextState());
+            user.setStateUpdate(currentDateTime);
             wbUserRepository.save(user);
         } else {
             message = MessageUtils.getMessage(chatId, user.getState().unsuccessfulText(), user.getState().prevState().replyKeyboard());
