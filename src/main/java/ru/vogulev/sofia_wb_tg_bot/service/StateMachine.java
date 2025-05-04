@@ -10,10 +10,10 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import ru.vogulev.sofia_wb_tg_bot.MessageUtils;
 import ru.vogulev.sofia_wb_tg_bot.entity.WbUser;
 import ru.vogulev.sofia_wb_tg_bot.model.Reply;
+import ru.vogulev.sofia_wb_tg_bot.model.UserDto;
 import ru.vogulev.sofia_wb_tg_bot.model.UserState;
 import ru.vogulev.sofia_wb_tg_bot.repository.WbUserRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -29,17 +29,20 @@ public class StateMachine {
     @Value("${BOT_ADMINS}")
     private List<String> admins;
 
-    public Reply eventHandler(Long chatId, String userName, String userMessage) {
+    public Reply eventHandler(UserDto userDto) {
         var currentDateTime = LocalDateTime.now();
+        var chatId = userDto.getChatId();
+        var login = userDto.getLogin();
+        var userMessage = userDto.getMessage();
         var user = wbUserRepository.findWbUserByChatId(chatId)
-                .orElse(new WbUser(UserState.START, currentDateTime, chatId, userName));
+                .orElse(new WbUser(UserState.START, currentDateTime, chatId, login, userDto.getName(), userDto.getPhone()));
         var success = handleUserAnswer(user, userMessage);
         SendMessage message;
         SendVideoNote videoNote = null;
-        if (userMessage.equals(DOWNLOAD_CMD) && admins.contains(userName)) {
+        if (userMessage.equals(DOWNLOAD_CMD) && isAdmin(login)) {
             return new Reply(SendDocument.builder()
                     .chatId(chatId)
-                    .document(new InputFile(exportService.exportUserData(), "WbUsers_%s.xlsx".formatted(LocalDate.now())))
+                    .document(new InputFile(exportService.exportUserData(), "WbUsers_%s.xlsx".formatted(currentDateTime)))
                     .build());
         }
         if (success) {
@@ -52,6 +55,10 @@ public class StateMachine {
             message = MessageUtils.getMessage(chatId, user.getState().unsuccessfulText(), user.getState().prevState().replyKeyboard());
         }
         return new Reply(message, videoNote);
+    }
+
+    public boolean isAdmin(String userName) {
+        return admins.contains(userName);
     }
 
     private SendVideoNote getVideoNote(Long chatId, InputFile video) {

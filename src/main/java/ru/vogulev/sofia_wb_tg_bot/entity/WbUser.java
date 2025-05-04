@@ -1,9 +1,7 @@
 package ru.vogulev.sofia_wb_tg_bot.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.vogulev.sofia_wb_tg_bot.model.UserState;
 
 import java.time.LocalDateTime;
@@ -15,11 +13,13 @@ import java.time.LocalDateTime;
 @Table(name = "wb_user")
 public class WbUser {
 
-    public WbUser(UserState state, LocalDateTime stateUpdate, Long chatId, String tgUserName) {
+    public WbUser(UserState state, LocalDateTime stateUpdate, Long chatId, String tgUserName, String name, String phone) {
         this.state = state;
         this.stateUpdate = stateUpdate;
         this.chatId = chatId;
         this.tgUserName = tgUserName;
+        this.name = name;
+        this.phone = phone;
     }
 
     @Id

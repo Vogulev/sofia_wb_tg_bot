@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.vogulev.sofia_wb_tg_bot.model.Reply;
+import ru.vogulev.sofia_wb_tg_bot.model.UserDto;
 
 @Slf4j
 @Getter
@@ -37,18 +38,21 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
 
     @Override
     public void consume(Update update) {
-        var reply = new Reply();
-        Long chatId;
-        String userName;
+        var userDto = new UserDto();
         if (update.hasCallbackQuery()) {
-            chatId = update.getCallbackQuery().getMessage().getChatId();
-            userName = update.getCallbackQuery().getFrom().getUserName();
-            reply = stateMachine.eventHandler(chatId, userName, update.getCallbackQuery().getData());
+            userDto.setChatId(update.getCallbackQuery().getMessage().getChatId());
+            userDto.setLogin(update.getCallbackQuery().getFrom().getUserName());
+            userDto.setName(update.getCallbackQuery().getFrom().getFirstName());
+            userDto.setMessage(update.getCallbackQuery().getData());
         } else if (update.hasMessage() && update.getMessage().hasText()) {
-            chatId = update.getMessage().getChatId();
-            userName = update.getMessage().getFrom().getUserName();
-            reply = stateMachine.eventHandler(chatId, userName, update.getMessage().getText());
+            userDto.setChatId(update.getMessage().getChatId());
+            userDto.setLogin(update.getMessage().getFrom().getUserName());
+            var contact = update.getMessage().getContact();
+            userDto.setName(contact.getFirstName());
+            userDto.setPhone(contact.getPhoneNumber());
+            userDto.setMessage(update.getMessage().getText());
         }
+        var reply = stateMachine.eventHandler(userDto);
         proceed(reply);
     }
 

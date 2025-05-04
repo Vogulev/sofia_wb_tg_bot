@@ -14,7 +14,7 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class ExportService {
-    public static final int COLUMN_SIZE = 5;
+    public static final int COLUMN_SIZE = 6;
     private final WbUserRepository wbUserRepository;
 
     public ByteArrayInputStream exportUserData() {
@@ -59,7 +59,7 @@ public class ExportService {
     @NotNull
     private static XSSFCellStyle getDataCellStyle(XSSFWorkbook workbook) {
         var createHelper = workbook.getCreationHelper();
-        var format = createHelper.createDataFormat().getFormat("d.mm.yyyy h:mm");
+        var format = createHelper.createDataFormat().getFormat("dd.mm.yyyy h:mm");
         var cellStyle = workbook.createCellStyle();
         cellStyle.setDataFormat(format);
         return cellStyle;
