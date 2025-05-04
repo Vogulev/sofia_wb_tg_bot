@@ -27,6 +27,7 @@ public class ExportService {
             row.createCell(2).setCellValue("Информация");
             row.createCell(3).setCellValue("Статус");
             row.createCell(4).setCellValue("Время последнего изменения статуса");
+            row.createCell(5).setCellValue("Логин");
             for (int i = 0; i < wbUsers.size(); i++) {
                 var dataRow = sheet.createRow(i + 1);
                 dataRow.createCell(0).setCellValue(wbUsers.get(i).getName());
@@ -34,11 +35,12 @@ public class ExportService {
                 dataRow.createCell(2).setCellValue(wbUsers.get(i).getAbout());
                 dataRow.createCell(3).setCellValue(wbUsers.get(i).getState().name());
 
-                var dataCellStyle = getDataCellStyle(workbook);
-
                 var dateCell = dataRow.createCell(4);
+                var dataCellStyle = getDataCellStyle(workbook);
                 dateCell.setCellStyle(dataCellStyle);
                 dateCell.setCellValue(wbUsers.get(i).getStateUpdate());
+
+                dataRow.createCell(5).setCellValue(wbUsers.get(i).getTgUserName());
             }
             for (int i = 0; i < COLUMN_SIZE; i++) {
                 sheet.autoSizeColumn(i);
