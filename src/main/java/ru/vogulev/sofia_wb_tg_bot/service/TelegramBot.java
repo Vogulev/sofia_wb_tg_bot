@@ -41,15 +41,15 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
         var userDto = new UserDto();
         if (update.hasCallbackQuery()) {
             userDto.setChatId(update.getCallbackQuery().getMessage().getChatId());
-            userDto.setLogin(update.getCallbackQuery().getFrom().getUserName());
-            userDto.setName(update.getCallbackQuery().getFrom().getFirstName());
+            var user = update.getCallbackQuery().getFrom();
+            userDto.setLogin(user.getUserName());
+            userDto.setName(user.getFirstName());
             userDto.setMessage(update.getCallbackQuery().getData());
         } else if (update.hasMessage() && update.getMessage().hasText()) {
             userDto.setChatId(update.getMessage().getChatId());
-            userDto.setLogin(update.getMessage().getFrom().getUserName());
-            var contact = update.getMessage().getContact();
-            userDto.setName(contact.getFirstName());
-            userDto.setPhone(contact.getPhoneNumber());
+            var user = update.getMessage().getFrom();
+            userDto.setLogin(user.getUserName());
+            userDto.setName(user.getFirstName());
             userDto.setMessage(update.getMessage().getText());
         }
         var reply = stateMachine.eventHandler(userDto);

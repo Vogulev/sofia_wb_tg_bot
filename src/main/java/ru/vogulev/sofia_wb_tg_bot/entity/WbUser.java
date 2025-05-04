@@ -13,13 +13,12 @@ import java.time.LocalDateTime;
 @Table(name = "wb_user")
 public class WbUser {
 
-    public WbUser(UserState state, LocalDateTime stateUpdate, Long chatId, String tgUserName, String name, String phone) {
+    public WbUser(UserState state, LocalDateTime stateUpdate, Long chatId, String tgUserName, String name) {
         this.state = state;
         this.stateUpdate = stateUpdate;
         this.chatId = chatId;
         this.tgUserName = tgUserName;
         this.name = name;
-        this.phone = phone;
     }
 
     @Id

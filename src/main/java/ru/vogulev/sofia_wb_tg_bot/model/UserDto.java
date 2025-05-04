@@ -11,6 +11,5 @@ public class UserDto {
     private Long chatId;
     private String login;
     private String name;
-    private String phone;
     private String message;
 }

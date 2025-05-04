@@ -35,7 +35,7 @@ public class StateMachine {
         var login = userDto.getLogin();
         var userMessage = userDto.getMessage();
         var user = wbUserRepository.findWbUserByChatId(chatId)
-                .orElse(new WbUser(UserState.START, currentDateTime, chatId, login, userDto.getName(), userDto.getPhone()));
+                .orElse(new WbUser(UserState.START, currentDateTime, chatId, login, userDto.getName()));
         var success = handleUserAnswer(user, userMessage);
         SendMessage message;
         SendVideoNote videoNote = null;
