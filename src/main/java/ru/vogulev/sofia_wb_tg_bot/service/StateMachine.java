@@ -46,19 +46,16 @@ public class StateMachine {
                     .build());
         }
         if (success) {
-            message = MessageUtils.getMessage(chatId, user.getState());
+            message = MessageUtils.getMessage(chatId, user.getState(), isAdmin(login));
             videoNote = getVideoNote(chatId, user.getState().video());
             user.setState(user.getState().nextState());
             user.setStateUpdate(currentDateTime);
             wbUserRepository.save(user);
         } else {
-            message = MessageUtils.getMessage(chatId, user.getState().unsuccessfulText(), user.getState().prevState().replyKeyboard());
+            message = MessageUtils.getMessage(chatId, user.getState().unsuccessfulText(),
+                    user.getState().prevState().replyKeyboard(), isAdmin(login));
         }
         return new Reply(message, videoNote);
-    }
-
-    public boolean isAdmin(String userName) {
-        return admins.contains(userName);
     }
 
     private SendVideoNote getVideoNote(Long chatId, InputFile video) {
@@ -97,5 +94,9 @@ public class StateMachine {
             case ABOUT -> user.setAbout(userMessage);
         }
         return true;
+    }
+
+    public boolean isAdmin(String userName) {
+        return admins.contains(userName);
     }
 }

@@ -63,7 +63,8 @@ public class NotifyService {
         for (var wbUser : wbUsers) {
             var stateUpdate = wbUser.getStateUpdate();
             if (stateUpdate.plusMinutes(notifyTime).isBefore(LocalDateTime.now())) {
-                var message = MessageUtils.getMessage(wbUser.getChatId(), wbUser.getName() + notifyText, transitionState.prevState().replyKeyboard());
+                var message = MessageUtils.getMessage(wbUser.getChatId(), wbUser.getName() + notifyText,
+                        transitionState.prevState().replyKeyboard(), false);
                 telegramBot.proceed(new Reply(message));
                 wbUser.setState(transitionState);
                 wbUserRepository.save(wbUser);
