@@ -14,6 +14,7 @@ import ru.vogulev.sofia_wb_tg_bot.model.UserDto;
 import ru.vogulev.sofia_wb_tg_bot.model.UserState;
 import ru.vogulev.sofia_wb_tg_bot.repository.WbUserRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -42,7 +43,7 @@ public class StateMachine {
         if (userMessage.equals(DOWNLOAD_CMD) && isAdmin(login)) {
             return new Reply(SendDocument.builder()
                     .chatId(chatId)
-                    .document(new InputFile(exportService.exportUserData(), "WbUsers_%s.xlsx".formatted(currentDateTime)))
+                    .document(new InputFile(exportService.exportUserData(), "WbUsers_%s.xlsx".formatted(LocalDate.now())))
                     .build());
         }
         if (success) {
