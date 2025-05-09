@@ -130,6 +130,10 @@
                                     <directory>video</directory>
                                     <targetPath>video</targetPath>
                                 </resource>
+                                <resource>
+                                    <directory>photo</directory>
+                                    <targetPath>photo</targetPath>
+                                </resource>
                             </resources>
                         </configuration>
                     </execution>

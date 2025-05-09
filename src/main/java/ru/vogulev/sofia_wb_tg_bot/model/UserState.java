@@ -395,6 +395,44 @@ public enum UserState {
             return new InlineKeyboardMarkup(List.of(row));
         }
     },
+    VIDEO_3_NOTIFY_3 {
+        @Override
+        public UserState nextState() {
+            return END;
+        }
+
+        @Override
+        public UserState prevState() {
+            return VIDEO_2;
+        }
+
+        @Override
+        public ReplyKeyboard replyKeyboard() {
+            var requestButton = new InlineKeyboardButton(SEND_REQUEST_MSG);
+            requestButton.setUrl(REQUEST_FORM_URL);
+            var row = new InlineKeyboardRow(requestButton);
+            return new InlineKeyboardMarkup(List.of(row));
+        }
+    },
+    END_AFTER_NOTIFY {
+        @Override
+        public UserState nextState() {
+            return END;
+        }
+
+        @Override
+        public UserState prevState() {
+            return VIDEO_2;
+        }
+
+        @Override
+        public ReplyKeyboard replyKeyboard() {
+            var requestButton = new InlineKeyboardButton(SEND_REQUEST_MSG);
+            requestButton.setUrl(REQUEST_FORM_URL);
+            var row = new InlineKeyboardRow(requestButton);
+            return new InlineKeyboardMarkup(List.of(row));
+        }
+    },
     END {
         @Override
         public UserState nextState() {

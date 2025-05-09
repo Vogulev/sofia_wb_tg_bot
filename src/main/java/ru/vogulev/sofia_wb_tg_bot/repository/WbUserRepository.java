@@ -14,4 +14,6 @@ public interface WbUserRepository extends JpaRepository<WbUser, Long> {
     List<WbUser> getWbUsersByState(UserState state);
 
     Optional<WbUser> findWbUserByChatId(Long chatId);
+
+    List<WbUser> getWbUsersByStateIn(List<UserState> states);
 }

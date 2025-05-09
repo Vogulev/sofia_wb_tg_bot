@@ -7,8 +7,10 @@ FROM bellsoft/liberica-openjdk-debian:21.0.1-12 as prod
 WORKDIR /application
 ARG WAR_FILE=/application/target/sofia_wb_tg_bot-1.0.0.jar
 ARG VIDEO_FILE=/application/target/classes/video/greet_video.mp4
+ARG PHOTO_DIR=/application/target/classes/photo
 COPY --from=build ${WAR_FILE} /application/app.jar
 COPY --from=build ${VIDEO_FILE} /application/video/greet_video.mp4
+COPY --from=build ${PHOTO_DIR} /application/photo
 ENV DB_USERNAME=example
 ENV DB_PASSWORD=example
 ENV DB_NAME=example

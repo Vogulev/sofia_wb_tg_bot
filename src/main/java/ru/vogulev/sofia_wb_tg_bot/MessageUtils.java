@@ -28,6 +28,16 @@ public class MessageUtils {
     }
 
     @NotNull
+    public SendMessage getMessage(Long chatId, String text) {
+        return getMessage(chatId, text, false);
+    }
+
+    @NotNull
+    public SendMessage getMessage(Long chatId, String text, ReplyKeyboard replyKeyboard) {
+        return getMessage(chatId, text, replyKeyboard, false);
+    }
+
+    @NotNull
     public SendMessage getMessage(Long chatId, String text, ReplyKeyboard replyKeyboard, boolean isAdmin) {
         SendMessage message = SendMessage.builder()
                 .chatId(chatId)

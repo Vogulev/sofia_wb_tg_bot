@@ -67,6 +67,9 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
             if (reply.getDocument() != null) {
                 telegramClient.execute(reply.getDocument());
             }
+            if (reply.getMediaGroup() != null) {
+                telegramClient.execute(reply.getMediaGroup());
+            }
         } catch (TelegramApiException e) {
             log.error(e.getMessage());
         }
